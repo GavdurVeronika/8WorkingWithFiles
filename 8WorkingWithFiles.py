@@ -4,7 +4,7 @@ def work_with_phonebook():
     choice=show_menu()
     phone_book=read_txt(filename_work)
 
-    while (choice!=6):
+    while (choice!=5):
 
         if choice==1: # 1. Отобразить весь справочник
             print_result(phone_book)
@@ -17,11 +17,7 @@ def work_with_phonebook():
         elif choice==4: # 4. Удалить абонента по фамилии
             lastname=str(input('lastname '))
             print(delete_by_lastname(phone_book,lastname))
-        elif choice == 5:  # 5. Добавить абонента/изменить данные
-            user_data = input('Inputdate') 
-            add_or_change_user(phone_book, user_data)
-            write_txt(filename_work, phone_book)
-            print('Data added/changed successfully')
+        
         choice=show_menu()
 
 def show_menu(): # Меню, выбор из списка
@@ -30,9 +26,8 @@ def show_menu(): # Меню, выбор из списка
             "2. Найти абонента по фамилии\n"
             "3. Найти абонента по номеру телефона\n"
             "4. Удалить абонента по фамилии\n"
-            "5. Добавить абонента/изменить данные\n"
-            "6. Закончить работу")
-    choice = int(input("From 1-6: "))
+            "5. Закончить работу")
+    choice = int(input("From 1-5: "))
     return choice
 
 def read_txt(filename): # Чтение файла
@@ -45,7 +40,7 @@ def read_txt(filename): # Чтение файла
     return phone_book
 
 def write_txt(filename , phone_book): # Запись файла
-    with open(filename,'w',encoding='utf-8') as phout:
+    with open(filename,'r+',encoding='utf-8') as phout:
         for i in range(len(phone_book)):
             s=''
             for v in phone_book[i].values():
@@ -103,20 +98,5 @@ def delete_by_lastname(phone_book, last_name):
             return True
     return False
 
-# 5. Добавить/изменить пользователя
-def add_or_change_user(phone_book, user_data):
-    fields = user_data.split(",")  # Собираем список
-    fields = [item.strip() for item in fields]  # Убираем концевые пробелы
-    print(f"\nДобавляем запись: {fields}")
-    if len(fields) != 4 or not fields[2].isdigit():
-        print("Неверный формат ввода данных.")
-        return
-    new_entry = dict(zip(["Фамилия", "Имя", "Телефон", "Описание"], fields))
-    for i, entry in enumerate(phone_book):
-        if entry["Фамилия"] == new_entry["Фамилия"]:  # Нашли существующую запись
-            phone_book[i] = new_entry  # Заменяем данные
-            return
-    phone_book.append(new_entry) 
-    
 work_with_phonebook()
 
